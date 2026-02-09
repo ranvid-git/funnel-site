@@ -1,30 +1,447 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>SupaNova — Funnel</title>
+  <title>UGC Command Center — Plan, Source, Analyze</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body{font-family:system-ui,Arial;margin:0;padding:40px;max-width:720px}
-    h1{margin:0 0 12px}
-    .box{padding:24px;border:1px solid #ddd;border-radius:14px}
-    input,button{padding:12px 14px;font-size:16px}
-    input{width:100%;max-width:360px;margin-right:8px}
+    :root{
+      color-scheme:light;
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --accent:#3b82f6;
+      --accent-2:#22c55e;
+      --border:#e2e8f0;
+      --shadow:0 20px 40px rgba(15,23,42,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 24px 80px;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:40px;
+    }
+    .logo{
+      font-weight:700;
+      letter-spacing:0.4px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo span{
+      display:inline-flex;
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#60a5fa,#22c55e);
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:18px;
+    }
+    nav{
+      display:flex;
+      gap:18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:32px;
+      align-items:center;
+      margin-bottom:60px;
+    }
+    .hero h1{
+      font-size:44px;
+      line-height:1.1;
+      margin:0 0 16px;
+    }
+    .hero p{
+      margin:0 0 24px;
+      color:var(--muted);
+      font-size:18px;
+    }
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    .btn{
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-weight:600;
+      font-size:14px;
+      cursor:pointer;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+      box-shadow:0 10px 24px rgba(59,130,246,0.3);
+    }
+    .btn-ghost{
+      background:white;
+      border-color:var(--border);
+      color:var(--text);
+    }
+    .hero-card{
+      background:var(--card);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:#e0f2fe;
+      color:#0369a1;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+    .grid{
+      display:grid;
+      gap:20px;
+    }
+    .grid-3{
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .grid-2{
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    }
+    .card{
+      background:var(--card);
+      border-radius:20px;
+      padding:20px;
+      border:1px solid var(--border);
+      box-shadow:0 14px 30px rgba(15,23,42,0.06);
+    }
+    .card h3{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size:28px;
+    }
+    .section-title p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .workflow{
+      margin-top:60px;
+    }
+    .timeline{
+      display:grid;
+      gap:14px;
+    }
+    .timeline-item{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:16px;
+      border-radius:16px;
+      background:#f8fafc;
+      border:1px dashed #cbd5f5;
+    }
+    .timeline-item span{
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      background:white;
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+    }
+    .insights{
+      margin-top:60px;
+    }
+    .insights .card{
+      position:relative;
+      overflow:hidden;
+    }
+    .insights .card::after{
+      content:"";
+      position:absolute;
+      right:-40px;
+      top:-40px;
+      width:120px;
+      height:120px;
+      border-radius:40px;
+      background:rgba(59,130,246,0.12);
+    }
+    .cta{
+      margin-top:70px;
+      padding:36px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#1d4ed8,#22c55e);
+      color:white;
+      display:grid;
+      gap:18px;
+      align-items:center;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .cta form{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    input,select{
+      padding:12px 14px;
+      border-radius:12px;
+      border:none;
+      flex:1 1 160px;
+    }
+    footer{
+      margin-top:60px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .marketplaces{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      padding:6px 12px;
+      background:white;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-size:12px;
+      color:#334155;
+    }
   </style>
 </head>
 <body>
-  <h1>Work smarter. Grow faster.</h1>
-  <p>Get a free Creator Audit. We’ll reply within 24 hours.</p>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <span>UC</span>
+        <div>
+          UGC Command Center
+          <div style="font-size:12px;color:var(--muted);font-weight:500;">Plan, source, and scale creator content</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#workflows">Workflow</a>
+        <a href="#insights">Insights</a>
+        <a href="#integrations">Integrations</a>
+        <a href="#contact">Demo</a>
+      </nav>
+    </header>
 
-  <!-- Replace this form block with your HubSpot embed when ready -->
-  <div class="box">
-    <form action="https://formspree.io/f/your-id" method="POST">
-      <input type="email" name="email" placeholder="you@company.com" required />
-      <button type="submit">Get the audit</button>
-    </form>
-    <p style="font-size:14px;color:#555">No spam. 1 email to confirm.</p>
+    <section class="hero">
+      <div>
+        <div class="pill">All-in-one UGC operating system</div>
+        <h1>Source, plan, budget, and analyze every creator collaboration in one workspace.</h1>
+        <p>UGC Command Center keeps your creator strategy organized without being a marketplace. Centralize briefs, manage budgets, track performance, and brainstorm ideas — then send approved creators to your favorite marketplaces or agencies.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Request a demo</button>
+          <button class="btn btn-ghost">View sample workspace</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3 style="margin-top:0">Today’s snapshot</h3>
+        <div class="grid grid-2" style="margin-top:16px">
+          <div class="card">
+            <h3>14 active briefs</h3>
+            <p>Covering paid ads, organic social, and product seeding.</p>
+          </div>
+          <div class="card">
+            <h3>$42.6k budget</h3>
+            <p>Projected spend across Q3 creator drops.</p>
+          </div>
+          <div class="card">
+            <h3>68 creators</h3>
+            <p>Shortlisted and tagged by niche + platform.</p>
+          </div>
+          <div class="card">
+            <h3>+18% ROAS</h3>
+            <p>UGC concepts outperforming studio ads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-3" id="workflows">
+      <div class="card">
+        <h3>Creator sourcing hub</h3>
+        <p>Build a tagged roster, track outreach, and keep contract status, rates, and notes in one place.</p>
+      </div>
+      <div class="card">
+        <h3>Campaign planning</h3>
+        <p>Map concepts to launch calendars, deliverables, and channels so every creator knows the brief.</p>
+      </div>
+      <div class="card">
+        <h3>Budget control</h3>
+        <p>Forecast spend, approvals, and payments across packages and usage rights.</p>
+      </div>
+      <div class="card">
+        <h3>Performance analysis</h3>
+        <p>Track wins by hook, creator, and platform with automated scorecards.</p>
+      </div>
+      <div class="card">
+        <h3>Brainstorming studio</h3>
+        <p>Capture new concepts, competitive intel, and AI-assisted ideation boards.</p>
+      </div>
+      <div class="card">
+        <h3>Stakeholder visibility</h3>
+        <p>Share dashboards with marketing, finance, and legal so approvals move fast.</p>
+      </div>
+    </section>
+
+    <section class="workflow">
+      <div class="section-title">
+        <h2>How teams run UGC programs</h2>
+        <p>Built for growth teams, performance marketers, and content ops.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span>1</span>
+          <div>
+            <strong>Plan and brief</strong>
+            <p>Create your launch brief, creative guardrails, and success benchmarks.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span>2</span>
+          <div>
+            <strong>Source creators</strong>
+            <p>Log inbound talent, import from spreadsheets, or push briefs to marketplaces.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span>3</span>
+          <div>
+            <strong>Manage production</strong>
+            <p>Track timelines, revisions, usage rights, and deliverable approvals.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span>4</span>
+          <div>
+            <strong>Analyze and optimize</strong>
+            <p>Connect results to creators, hooks, and formats to scale what works.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="insights" id="insights">
+      <div class="section-title">
+        <h2>Insights that keep spend efficient</h2>
+        <p>Measure per-creator ROI and spot the next breakout concept.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Creative performance map</h3>
+          <p>See top hooks, angles, and formats by platform to replicate winning styles.</p>
+        </div>
+        <div class="card">
+          <h3>Budget vs. output tracker</h3>
+          <p>Compare planned spend to delivered content with alerts on overruns.</p>
+        </div>
+        <div class="card">
+          <h3>Creator health score</h3>
+          <p>Rank creators by consistency, revision speed, and viewer sentiment.</p>
+        </div>
+        <div class="card">
+          <h3>Idea pipeline</h3>
+          <p>Keep brainstorming sessions linked to briefs so ideas become executable.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="workflow" id="integrations">
+      <div class="section-title">
+        <h2>Marketplace-friendly workflows</h2>
+        <p>Not a marketplace. Plug into the talent sources you already use.</p>
+      </div>
+      <div class="marketplaces">
+        <span class="badge">Connect: Aspire</span>
+        <span class="badge">Connect: Grin</span>
+        <span class="badge">Connect: Billo</span>
+        <span class="badge">Connect: Collabstr</span>
+        <span class="badge">Connect: CreatorIQ</span>
+        <span class="badge">Connect: TikTok Marketplace</span>
+      </div>
+      <div class="grid grid-3" style="margin-top:20px">
+        <div class="card">
+          <h3>Brief export</h3>
+          <p>Send approved briefs to external marketplaces with one click.</p>
+        </div>
+        <div class="card">
+          <h3>Contract vault</h3>
+          <p>Upload and track usage rights across multiple agencies.</p>
+        </div>
+        <div class="card">
+          <h3>Finance sync</h3>
+          <p>Push invoices and payment schedules to your accounting stack.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div>
+        <h2 style="margin:0 0 8px;">Ready to organize creator sourcing?</h2>
+        <p style="margin:0;opacity:0.9;">Tell us about your next UGC campaign and we’ll share a tailored workspace.</p>
+      </div>
+      <form action="https://formspree.io/f/your-id" method="POST">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="email" name="email" placeholder="Work email" required />
+        <select name="team-size" aria-label="Team size">
+          <option value="">Team size</option>
+          <option>1-5</option>
+          <option>6-15</option>
+          <option>16-30</option>
+          <option>31+</option>
+        </select>
+        <button class="btn btn-ghost" type="submit">Get the workspace</button>
+      </form>
+    </section>
+
+    <footer>
+      <div>UGC Command Center © 2024</div>
+      <div>Questions? <a href="mailto:hello@ugccommandcenter.com">hello@ugccommandcenter.com</a></div>
+    </footer>
   </div>
-
-  <p><a href="./thanks.html">Preview Thank You page</a></p>
 </body>
 </html>
